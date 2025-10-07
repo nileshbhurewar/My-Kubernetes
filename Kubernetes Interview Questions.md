@@ -1270,12 +1270,3 @@ kubectl exec -it <pod1> -- ping <pod2-ip>
 kubectl exec -it <pod1> -- curl http://<pod2-service>:<port>
 
 
-This set focuses on DevOps practical scenarios — logs, probes, autoscaling, networking, PVC, HPA, debugging, and port-forwarding — exactly what you’ll face in real interviews.
-
-If you want, I can compile all 155+ Kubernetes questions (Sets 1–7) into a full “Kubernetes DevOps Interview Handbook 2025” in PDF/Markdown with:
-
-Commands cheat sheet
-
-YAML examples
-
-Scenarios & troubleshooting tips
