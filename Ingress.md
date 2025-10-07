@@ -232,3 +232,6 @@ kubectl delete namespace nilesh
 
 📘 **Summary:**
 This configuration sets up an isolated namespace with two web applications (**Nginx** and **Apache2**) managed by an **Nginx Ingress Controller**, allowing traffic routing via specific paths on a single IP address.
+
+<img width="539" height="358" alt="image" src="https://github.com/user-attachments/assets/3511b927-5626-4f54-95e8-f249c2b7448d" />
+
