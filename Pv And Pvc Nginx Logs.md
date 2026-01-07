@@ -197,3 +197,141 @@ kubectl delete pv nginx-pv
 ### ✅ **Result:**
 
 * Nginx container logs (`access.log`, `error.log`) are stored persistently at `/mnt/data/nginx-logs` ev
+
+# Kubernetes PersistentVolume (PV) and PersistentVolumeClaim (PVC)
+
+This document explains PersistentVolume (PV) and PersistentVolumeClaim (PVC) concepts in Kubernetes with an interview-focused and real-world perspective. It is formatted for clean rendering in editors and GitHub.
+
+---
+
+## Important PV Fields (Interview)
+
+| Field                         | Meaning                              |
+| ----------------------------- | ------------------------------------ |
+| capacity.storage              | Size of the storage                  |
+| accessModes                   | How the volume can be mounted        |
+| storageClassName              | StorageClass associated with the PV  |
+| persistentVolumeReclaimPolicy | Action taken when PVC is deleted     |
+| volumeMode                    | Filesystem or Block storage          |
+| nodeAffinity                  | Restricts which nodes can use the PV |
+
+---
+
+## PV Access Modes (Very Important)
+
+| Access Mode             | Meaning                          | Example          |
+| ----------------------- | -------------------------------- | ---------------- |
+| ReadWriteOnce (RWO)     | Mounted read-write by one node   | AWS EBS          |
+| ReadOnlyMany (ROX)      | Mounted read-only by many nodes  | Shared content   |
+| ReadWriteMany (RWX)     | Mounted read-write by many nodes | NFS, EFS         |
+| ReadWriteOncePod (RWOP) | Mounted by only one Pod          | Newer Kubernetes |
+
+---
+
+## PV Reclaim Policies
+
+What happens when a PersistentVolumeClaim is deleted?
+
+| Policy  | Behavior                                  |
+| ------- | ----------------------------------------- |
+| Retain  | Data remains; manual cleanup required     |
+| Delete  | Storage deleted automatically             |
+| Recycle | Deprecated; cleans data and reuses volume |
+
+---
+
+## What is PersistentVolumeClaim (PVC)
+
+### Definition
+
+A PersistentVolumeClaim (PVC) is a request for storage made by a user or application.
+
+Example requirement:
+
+"I need 10GB of storage with ReadWriteMany access."
+
+---
+
+## What PVC Does
+
+* Requests storage
+* Finds a matching PersistentVolume
+* Binds to the PersistentVolume
+* Acts as a storage abstraction for Pods
+
+Note:
+Pods never reference PersistentVolumes directly. Pods always use PVCs.
+
+---
+
+## Static vs Dynamic Provisioning
+
+### Static Provisioning
+
+* Cluster administrator manually creates PersistentVolumes
+* User creates PersistentVolumeClaims
+* PVC binds to an existing PV
+
+Commonly used in:
+
+* Minikube
+* On-prem Kubernetes clusters
+
+---
+
+### Dynamic Provisioning (Production)
+
+* User creates a PVC
+* Storage is created automatically
+* No manual PV creation is required
+
+Dynamic provisioning uses StorageClass.
+
+---
+
+## PV Lifecycle States
+
+| State     | Meaning                           |
+| --------- | --------------------------------- |
+| Available | PV is ready to be claimed         |
+| Bound     | PV is bound to a PVC              |
+| Released  | PVC deleted; PV not yet reclaimed |
+| Failed    | Error occurred                    |
+
+---
+
+## Common Mistakes
+
+* PVC stuck in Pending state due to no matching PV or incorrect StorageClass
+* Using ReadWriteMany access mode with AWS EBS
+* Data loss due to Delete reclaim policy
+* Using hostPath volumes in production environments
+
+---
+
+## Kubernetes Storage vs Docker Volumes
+
+| Docker               | Kubernetes            |
+| -------------------- | --------------------- |
+| Volume               | PersistentVolume      |
+| Bind mount           | hostPath              |
+| Manual configuration | Declarative YAML      |
+| Node-level storage   | Cluster-level storage |
+
+---
+
+## Interview One-Line Summary
+
+PersistentVolume (PV) represents actual storage.
+PersistentVolumeClaim (PVC) is a request for storage.
+Pods mount PVCs, not PVs.
+
+---
+
+## Notes
+
+* PVs are cluster-scoped resources
+* PVCs are namespace-scoped resources
+* Storage abstraction improves portability and scalability
+
+
